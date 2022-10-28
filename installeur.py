@@ -60,4 +60,5 @@ def main() :
     with open("info","w") as f :
         f.write("installed")
 
-main()
+if __name__ == '__main__' :
+    main()
