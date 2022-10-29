@@ -31,6 +31,8 @@ def loger() :
         f.close()
 
 def main() :
+    with open("keyconf.txt","w") as f :
+        f.close()
     loger()
     securing()
 

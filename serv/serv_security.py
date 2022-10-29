@@ -1,3 +1,4 @@
+from Crypto.Hash import HMAC, SHA256
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
@@ -45,3 +46,16 @@ def decrypt(encrypted) :
         )
     )
     return original_message
+
+    
+def verify_sha256_signature(key : str, msg :str, hash):
+    msg = bytes(msg.encode())
+    key = bytes(key.encode())
+    h = HMAC.new(key, digestmod=SHA256)
+    h.update(msg)
+    try:
+        h.hexverify(hash)
+        print("The message '%s' is authentic" % msg)
+    except ValueError:
+        print("The message or the key is wrong")
+        exit()

@@ -44,6 +44,11 @@ def main() :
     except FileNotFoundError :
         installer()
         os.chdir(home)
+        hmac_key = str(input("entrer the hmac secret keys : "))
+        with open("client/keyconf.txt","w") as f :
+            f.write(hmac_key)
+        with open("serv/keyconf.txt",'w') as f :
+            f.write(hmac_key)
         with open("client/client_public_key.pem", "r") as f:
             clientkey = f.read()
         with open("serv/client_public_key.pem", "w") as f :

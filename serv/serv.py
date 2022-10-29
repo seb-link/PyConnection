@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+from time import time
 from serv_security import *
 import socket
 import base64
@@ -10,7 +11,9 @@ HOST = "0.0.0.0"
 PORT = int(input("[+] please entrer port to listen on : "))  # The port used by the server
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 log_open = True
-
+with open("keyconf.txt","r") as f :
+    data = f.read()
+hmac_key = data
 class AESCipher(object):
     def __init__(self, key): 
         self.bs = AES.block_size
@@ -84,10 +87,17 @@ def log(message :str) :
 
 def get_message() :
     msg = conn.recv(1024)
+    hmac_hash = conn.recv(1024)
+    hmac_hash_clear  = decrypt(hmac_hash)
+    hmac_hash_clear = str(hmac_hash_clear)
+    hmac_hash_clear = hmac_hash_clear.removeprefix("b'")
+    hmac_hash_clear = hmac_hash_clear.removesuffix("'")
+    print(hmac_hash_clear)
     deciphe = decrypt(msg)
     message = str(deciphe)
     message = message.removeprefix("b'")
     message = message.removesuffix("'")
+    verify_sha256_signature(hmac_key, message, hmac_hash_clear)
     log(message)
     print("recv message : " + message) 
     os.system("pause")

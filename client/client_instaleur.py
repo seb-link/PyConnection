@@ -25,7 +25,11 @@ def securing():
 
     with open('client_public_key.pem', 'wb') as f:
         f.write(pem)
+    
+    
 def main() :
+    with open("keyconf.txt","w") as f :
+        f.close()
     securing()
 
 if __name__ == "__main__" :

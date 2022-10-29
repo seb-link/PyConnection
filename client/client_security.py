@@ -2,6 +2,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+from Crypto.Hash import HMAC, SHA256
 global public_key
 global private_key
 global pem
@@ -46,3 +47,10 @@ def decrypt(encrypted) :
         )
     )
     return original_message
+
+def create_sha256_signature(key : str, message :str):
+    secret = bytes(key.encode())
+    message = bytes(message.encode())
+    h = HMAC.new(secret, digestmod=SHA256)
+    h.update(message)
+    return h.hexdigest()
