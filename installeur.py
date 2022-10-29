@@ -1,6 +1,5 @@
 from client.client_instaleur import main as clientinstall
 from serv.serv_instaleur import main as servinstall
-import pip
 import os
 home = os.getcwd()
 requrements = ["cryptography","pycryptodome","datetime"]
