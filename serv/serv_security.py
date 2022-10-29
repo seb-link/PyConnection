@@ -1,5 +1,4 @@
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -25,7 +24,6 @@ def encrypt(what) :
     what = str(what)
     message = bytes(what.encode())
     public_key = get_public_key()
-
     encrypted = public_key.encrypt(
         message,
         padding.OAEP(
