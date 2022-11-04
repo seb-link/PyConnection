@@ -24,7 +24,7 @@ def send_message() :
     msg = str(input("Write message : "))
     hmac_hash = encrypt(create_sha256_signature(hmac_key,msg))
     message = encrypt(msg)
-    print(message)
+    print(f"Encrypted message : {message.hex()}")
     del msg
     s.send(message)
     s.send(hmac_hash)

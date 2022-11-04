@@ -1,6 +1,7 @@
 from client.client_instaleur import main as clientinstall
 from serv.serv_instaleur import main as servinstall
 import os
+import secrets
 home = os.getcwd()
 requrements = ["cryptography","pycryptodome","datetime"]
 shellcode1 = f"""
@@ -44,7 +45,12 @@ def main() :
     except FileNotFoundError :
         installer()
         os.chdir(home)
-        hmac_key = str(input("entrer the hmac secret keys : "))
+        hmac_key = str(input("entrer the hmac secret keys [Entrer *random* to generate a random password]: "))
+        if hmac_key == "*random*" :
+            len = int(input("Passw0rd lenght : "))
+            hmac_key = (secrets.token_urlsafe(len))
+            print("The password is :")
+            print(f"{hmac_key}")
         with open("client/keyconf.txt","w") as f :
             f.write(hmac_key)
         with open("serv/keyconf.txt",'w') as f :

@@ -55,7 +55,7 @@ def verify_sha256_signature(key : str, msg :str, hash):
     h.update(msg)
     try:
         h.hexverify(hash)
-        print("The message '%s' is authentic" % msg)
+        print("The message is authentic")
     except ValueError:
         print("The message or the key is wrong")
         exit()

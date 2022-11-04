@@ -81,7 +81,7 @@ def log(message :str) :
     if log_open == False:
         openlog()
     with open("log.log","a") as l :
-        l.write(f"[{datetime.today().strftime('%Y-%m-%d %H:%M')}] de : {addr} message : {message}")
+        l.write(f"[{datetime.today().strftime('%d-%m-%Y %H:%M')}] de : {addr} message : {message}")
         l.write("\n")
     verlog()
 
@@ -92,7 +92,6 @@ def get_message() :
     hmac_hash_clear = str(hmac_hash_clear)
     hmac_hash_clear = hmac_hash_clear.removeprefix("b'")
     hmac_hash_clear = hmac_hash_clear.removesuffix("'")
-    print(hmac_hash_clear)
     deciphe = decrypt(msg)
     message = str(deciphe)
     message = message.removeprefix("b'")
