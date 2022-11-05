@@ -1,12 +1,18 @@
 from datetime import datetime
 import os
-from time import time
+os.system("title serv")
+import time
 from serv_security import *
 import socket
 import base64
 import hashlib
-from Crypto import Random
-from Crypto.Cipher import AES
+try :
+    from Crypto import Random
+    from Crypto.Cipher import AES
+except ModuleNotFoundError:
+    print("FATAL : Error during load pycryptodome module")
+    os.system("pause")
+    exit()
 HOST = "0.0.0.0"
 PORT = int(input("[+] please entrer port to listen on : "))  # The port used by the server
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -60,7 +66,7 @@ def openlog() :
         data = l.read()
     result = AESCipher.decrypt(AESCipher, data)
     with open("log.log", "w") as l:
-        l.write(result)
+        l.write(f"{result}\n")
     global log_open
     log_open = True
 
@@ -102,8 +108,8 @@ def get_message() :
     os.system("pause")
 
 def main() :
-    os.system("title serv")
     connect()
+    time.sleep(.75)
     get_message()
 
 
