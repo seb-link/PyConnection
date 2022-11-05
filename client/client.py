@@ -2,6 +2,7 @@ from client_security import *
 import socket
 import os
 import time
+os.system("title client")
 HOST = str(input("Enter server ip address : "))  # The server's hostname or IP address
 if HOST == "::1" :
     HOST = "127.0.0.1"
@@ -31,8 +32,8 @@ def send_message() :
     os.system("pause")
 
 def main() :
-    os.system("title client")
     connect()
+    time.sleep(.75)
     send_message()
 
 
