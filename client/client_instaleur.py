@@ -2,10 +2,10 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
-def securing():
+def securing(key_size : int):
     private_key = rsa.generate_private_key(
         public_exponent=65537,
-        key_size=4096,
+        key_size=key_size,
         backend=default_backend()
     )
     public_key = private_key.public_key()
@@ -27,10 +27,10 @@ def securing():
         f.write(pem)
     
     
-def main() :
+def main(key_size : int) :
     with open("keyconf.txt","w") as f :
         f.close()
-    securing()
+    securing(key_size)
 
 if __name__ == "__main__" :
     main()
