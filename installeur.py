@@ -3,12 +3,14 @@ try :
     import os
     import secrets
     from string import *
+    import sys
 except ImportError :
-    print("Il manque des modules")
+    print("Missing modules")
     exit(1)
 try :
     from client.client_instaleur import main as clientinstall
     from serv.serv_instaleur import main as servinstall
+    import pyfiglet
 except ModuleNotFoundError:
     print("installing nessecary modules (this may take some time)...")
     os.system("python -m pip install cryptography")
@@ -16,6 +18,19 @@ except ModuleNotFoundError:
     os.system("python -m pip uninstall pycryptodome")
     os.system("python -m pip uninstall pycrypto")
     os.system("python -m pip install pycryptodome")
+    os.system("python -m pip install pyfiglet")
+keysize = 4096
+try :
+    args1 = sys.argv[1]
+    if args1 == "size=8192" :
+        keysize = 8192
+        print("Warning large key size may take time to generate")
+    elif args1 == "size=2048" :
+        keysize = 2048
+    elif args1 == "size=1024" :
+        keysize = 1024
+except IndexError :
+    pass
 
 home = os.getcwd()
 shellcode1 = f"""
@@ -27,14 +42,23 @@ os.chdir(r"{home}\serv")
 os.startfile("serv.py")
 
 """
+
+name = "PyConnetion"
+Author = "SebLink"
+version = "0.5"
+
+buff = pyfiglet.figlet_format(f"{name} v{version} by {Author}")
+print(buff)
+
+
 def installserv() :
     os.chdir("./serv")
-    servinstall()
+    servinstall(keysize)
     os.chdir("..")
 
 def installclient() :
     os.chdir("./client")
-    clientinstall()
+    clientinstall(keysize)
     os.chdir("..")
 
 def installer() :
@@ -50,7 +74,10 @@ def main() :
         os.chdir(home)
         hmac_key = str(input("entrer the hmac secret keys [Entrer *random* to generate a random password]: "))
         if hmac_key == "*random*" :
-            len = int(input("Passw0rd lenght : "))
+            try :
+                len = int(input("Passw0rd lenght : "))
+            except ValueError :
+                exit("bye")
             alphabet = digits + ascii_letters + punctuation
             hmac_key = ''.join(secrets.choice(alphabet) for i in range(len))
             os.system("pause")
