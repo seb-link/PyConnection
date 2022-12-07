@@ -10,11 +10,16 @@ try :
     from Crypto import Random
     from Crypto.Cipher import AES
 except ModuleNotFoundError:
-    print("FATAL : Error during load pycryptodome module")
+    print("FATAL : Error during load pycryptodome module try launch installeur")
     os.system("pause")
     exit()
 HOST = "0.0.0.0"
-PORT = int(input("[+] please entrer port to listen on : "))  # The port used by the server
+try :
+    PORT = int(input("[+] please entrer port to listen on : "))  # The port used by the server
+except ValueError :
+    print("Invalid port")
+    os.system("pause")
+    exit()
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 log_open = True
 with open("keyconf.txt","r") as f :
@@ -94,6 +99,10 @@ def log(message :str) :
 def get_message() :
     msg = conn.recv(1024)
     hmac_hash = conn.recv(1024)
+    if not hmac_hash :
+        print("no hmac recive ! can't verify message exiting...")
+        os.system("pause")
+        exit()
     hmac_hash_clear  = decrypt(hmac_hash)
     hmac_hash_clear = str(hmac_hash_clear)
     hmac_hash_clear = hmac_hash_clear.removeprefix("b'")
@@ -104,6 +113,8 @@ def get_message() :
     message = message.removesuffix("'")
     verify_sha256_signature(hmac_key, message, hmac_hash_clear)
     log(message)
+    with open("hashmac.log","a") as f :
+        f.write(f"[{datetime.today().strftime('%d-%m-%Y %H:%M')}] hash : {hmac_hash_clear}\n")
     print("recv message : " + message) 
     os.system("pause")
 
