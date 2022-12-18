@@ -34,7 +34,6 @@ except IndexError :
 
 home = os.getcwd()
 shellcode1 = f"""
-#!/usr/bin/python3
 import os
 os.chdir(r"{home}\client")
 os.startfile("client.py")
@@ -45,7 +44,7 @@ os.startfile("serv.py")
 
 name = "PyConnetion"
 Author = "SebLink"
-version = "0.5"
+version = "0.6"
 
 buff = pyfiglet.figlet_format(f"{name} v{version} by {Author}")
 print(buff)

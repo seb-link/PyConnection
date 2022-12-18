@@ -29,7 +29,7 @@ def send_message() :
     print(f"Encrypted message : {message}")
     del msg
     s.send(message)
-    s.send(hmac_hash)
+    #s.send(hmac_hash)
     os.system("pause")
 
 def main() :

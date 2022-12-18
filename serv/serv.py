@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import os
 os.system("title serv")
 import time
@@ -13,9 +13,9 @@ except ModuleNotFoundError:
     print("FATAL : Error during load pycryptodome module try launch installeur")
     os.system("pause")
     exit()
-HOST = "0.0.0.0"
+
 try :
-    PORT = int(input("[+] please entrer port to listen on : "))  # The port used by the server
+    port = int(input("[+] please entrer port to listen on : "))  # The port used by the server
 except ValueError :
     print("Invalid port")
     os.system("pause")
@@ -51,14 +51,17 @@ class AESCipher(object):
 
 def connect() :
     try :
-        s.bind((HOST, PORT))
+        s.bind(("0.0.0.0", port))
         s.listen()
         global conn, addr
-        print("[+] Listen for connection...")
+        print("[+] Listening for connection...")
+        with open("log.log","a") as l :
+            l.write(f"[{datetime.datetime.today().strftime('%d-%m-%Y %H:%M:%S')}] Listening for connection on port {port} \n")
         conn, addr = s.accept()
         print(f"[+] Got connection from {addr} !")
-        
-    except:
+        with open("log.log","a") as l :
+            l.write(f"[{datetime.datetime.today().strftime('%d-%m-%Y %H:%M:%S')}] Got connection from {addr}\n")
+    except socket.error:
         print("FATAL: an error occurred")
         #print(e)
         os.system("pause")
@@ -92,7 +95,7 @@ def log(message :str) :
     if log_open == False:
         openlog()
     with open("log.log","a") as l :
-        l.write(f"[{datetime.today().strftime('%d-%m-%Y %H:%M')}] de : {addr} message : {message}")
+        l.write(f"[{datetime.datetime.today().strftime('%d-%m-%Y %H:%M:%S')}] de : {addr} message : {message}")
         l.write("\n")
     verlog()
 
@@ -101,6 +104,8 @@ def get_message() :
     hmac_hash = conn.recv(1024)
     if not hmac_hash :
         print("no hmac recive ! can't verify message exiting...")
+        with open("log.log","a") as l :
+            l.write(f"[{datetime.datetime.today().strftime('%d-%m-%Y %H:%M:%S')}] ERROR : no hmac recive, can't verify message\n")
         os.system("pause")
         exit()
     hmac_hash_clear  = decrypt(hmac_hash)
@@ -114,7 +119,7 @@ def get_message() :
     verify_sha256_signature(hmac_key, message, hmac_hash_clear)
     log(message)
     with open("hashmac.log","a") as f :
-        f.write(f"[{datetime.today().strftime('%d-%m-%Y %H:%M')}] hash : {hmac_hash_clear}\n")
+        f.write(f"[{datetime.datetime.today().strftime('%d-%m-%Y %H:%M:%S')}] hash : {hmac_hash_clear}\n")
     print("recv message : " + message) 
     os.system("pause")
 
@@ -122,7 +127,8 @@ def main() :
     connect()
     time.sleep(.75)
     get_message()
-
+    with open("log.log","a") as l :
+        l.write(f"[{datetime.today().strftime('%d-%m-%Y %H:%M')}] Exiting with error code : 0")
 
 if __name__ == "__main__" :
     main()
